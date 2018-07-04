@@ -15,6 +15,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	static SpriteBatch batch;
 	Bloque_Figura Figuras;
 	ShapeRenderer shapeRenderer;
+
 	Tablero tablero;
 	Bloque piso;
 	static OrthographicCamera camera;
