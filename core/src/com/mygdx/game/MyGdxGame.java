@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 public class MyGdxGame extends ApplicationAdapter {
 	static SpriteBatch batch;
 	Bloque_Figura Figuras;
-	ShapeRenderer shapeRenderer;
+	static ShapeRenderer shapeRenderer;
 
 	Tablero tablero;
 
@@ -93,6 +93,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
+		shapeRenderer.dispose();
+		Bloque_Figura.dispose();
 		MundoFisico.Dispose();
 	}
 }

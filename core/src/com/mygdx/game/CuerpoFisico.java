@@ -8,6 +8,7 @@ public interface CuerpoFisico {
 
     public void Actualizar();
     public void crear();
+    public void dispose();
 
 
 }

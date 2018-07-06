@@ -70,13 +70,13 @@ public class Rectangulo extends Rectangle implements Figura {
     public void pintar() {
 
         MyGdxGame.batch.begin();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(this.color);
+        MyGdxGame.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        MyGdxGame.shapeRenderer.setColor(this.color);
 
         coordenadas.metersToPixeles();
-        shapeRenderer.rect(coordenadas.getX(),coordenadas.getY(),-x,-y,getWidth(),getHeight(),1f,1f,coordenadas.getAngle());
+        MyGdxGame.shapeRenderer.rect(coordenadas.getX(),coordenadas.getY(),-x,-y,getWidth(),getHeight(),1f,1f,coordenadas.getAngle());
 
-        shapeRenderer.end();
+        MyGdxGame.shapeRenderer.end();
         MyGdxGame.batch.end();
         coordenadas.pixelesToMeters();
     }

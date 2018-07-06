@@ -2,10 +2,8 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -27,25 +25,31 @@ public class MundoFisico {
     public static Box2DDebugRenderer box2DDebugger;
 
     public static RayHandler rayHandler;
+    private static ArrayList<PointLight> Luces;
     private PointLight luz;
-    private PointLight luz2;
-    private PointLight luz3;
-    private PointLight luz4;
 
 
     public MundoFisico(){
-        world= new World(new Vector2(0,10),true);
+        world= new World(new Vector2(0f,10f),true);
         box2DDebugger=new Box2DDebugRenderer();
+        Luces= new ArrayList<PointLight>();
         rayHandler = new RayHandler(world);
         rayHandler.setAmbientLight(0f);
         luz= new PointLight(rayHandler,5000, Color.WHITE,4,(MyGdxGame.w/2)/100,0);
-        luz2=new PointLight(rayHandler,5000,Color.BLUE,8,(MyGdxGame.w)/100,(MyGdxGame.h/2)/100);
-        luz3=new PointLight(MundoFisico.rayHandler,5000,Color.WHITE,4,(MyGdxGame.w/2)/100,((MyGdxGame.h)-(MyGdxGame.h/8))/100);
-        luz4=new PointLight(rayHandler,5000, Color.BLUE,8,0,(MyGdxGame.h/2)/100);
         luz.setSoft(true);
-        luz2.setSoft(false);
-        luz3.setSoft(true);
-        luz4.setSoft(false);
+        Luces.add(luz);
+        luz=new PointLight(rayHandler,5000,Color.BLUE,8,(MyGdxGame.w)/100,(MyGdxGame.h/2)/100);
+        luz.setSoft(false);
+        Luces.add(luz);
+        luz=new PointLight(MundoFisico.rayHandler,5000,Color.WHITE,4,(MyGdxGame.w/2)/100,((MyGdxGame.h)-(MyGdxGame.h/8))/100);
+        luz.setSoft(true);
+        Luces.add(luz);
+        luz=new PointLight(rayHandler,5000, Color.BLUE,8,0,(MyGdxGame.h/2)/100);
+        luz.setSoft(false);
+        Luces.add(luz);
+        luz=null;
+
+
 
 
     }
@@ -67,8 +71,10 @@ public class MundoFisico {
     }
 
     public static void Dispose() {
+
+       rayHandler.dispose();
         world.dispose();
-        rayHandler.dispose();
+
     }
 
     public static BodyDef crearBodyDef(BodyDef.BodyType tipo){

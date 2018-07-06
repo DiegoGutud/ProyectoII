@@ -46,7 +46,11 @@ public class Bloque_Figura  {
             a.getCuerpo().Actualizar();
         }
     }
-
+    public static void dispose(){
+        for (Bloque_Figura a: Figuras) {
+            a.getCuerpo().dispose();
+        }
+    }
 
     public ArrayList<Bloque> getBloqueFigura(){
         return this.BloqueFigura;

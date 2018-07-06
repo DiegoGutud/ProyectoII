@@ -19,11 +19,11 @@ public class RectanguloTablero extends Rectangulo {
 
 
         MyGdxGame.batch.begin();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(getColor());
-        shapeRenderer.rect(getX(),getY(),getWidth(),getHeight());
+        MyGdxGame.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        MyGdxGame.shapeRenderer.setColor(getColor());
+        MyGdxGame.shapeRenderer.rect(getX(),getY(),getWidth(),getHeight());
 
-        shapeRenderer.end();
+        MyGdxGame.shapeRenderer.end();
         MyGdxGame.batch.end();
 
     }
