@@ -17,13 +17,14 @@ public class MyGdxGame extends ApplicationAdapter {
 	ShapeRenderer shapeRenderer;
 
 	Tablero tablero;
-	Bloque piso;
+
 	static OrthographicCamera camera;
 	static Vector3 touchedPosition;
 	static float w;
 	static float h;
-	//camera = new OrthographicCamera();
-	//camera.setToOrtho(false,800,400);
+	private InicializadorRestricciones restriccionesTablero;
+	private MundoFisico mundoFisico;
+
 
 	
 	@Override
@@ -35,36 +36,33 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		touchedPosition= new Vector3();
 		shapeRenderer= new ShapeRenderer();
-		tablero=null;
-		tablero=Factory.CrearTablero(TipoTablero.TABLERO_RECTANGULOS,TipoDisposicion.HORIZONTAL);
-		tablero.crear();
-		tablero.establecerVecindad();
+
+		mundoFisico=new MundoFisico();
+		restriccionesTablero=new InicializadorRestricciones();
+
+		tablero=Tablero.inicializar(new FactoryTableroRectangular(5,3,(MyGdxGame.w/9)*2,MyGdxGame.h/15));
+
+		tablero.crear(new FactoryBloquesActivos());
+		tablero.setRestricciones(restriccionesTablero.inicializar(tablero.getBloquesTablero(),tablero.getBloquesACrear()));
+		tablero.crearRestricciones();
+
 
 
 //piso
-		/*Bloque_Figura bloqueFigura=new Bloque_Figura();
-		Bodies body=new Bodies(); //orden
 
-		piso=BloqueFactory.Crear(TipoBloque.PISO,FiguraFactory.CrearFigura(TipoFigura.RECTANGULO_PISO,10+(w/9f)*2f,h-(h/15f)-(w/9f)*2f));
-		Bloque_Figura.Figuras.add(bloqueFigura);
-		body.Piso();
-		CuerpoFisico CF=body;
-		bloqueFigura.setCuerpo(CF);*/
+		FactoryFigura factoryFigura=new FactoryFiguraRectangulo();
+		FactoryBloque factoryBloque= new FactoryBloquesPiso();
+		factoryBloque.crearBloqueFisico(factoryFigura.crearFigura((w/9f)*2f,h-(h/15f)-(w/9f)*2f,(MyGdxGame.w/9)*5f,(MyGdxGame.w/9)*2.5f,Color.SKY));
 
 
 
-
-
-
-
-		//camera=new OrthographicCamera(30/100,30*(h/w)/100);
 		camera=new OrthographicCamera((w)/100,(h)/100);
 		camera.position.set((w/100)/2,(h/100)/2,0);
 
-		Bodies.CrearMundo();
 
 
-		Bodies.Piso();
+
+
 	}
 
 	@Override
@@ -74,16 +72,14 @@ public class MyGdxGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
-		//batch.begin();
 
-		//batch.end();
 		camera.update();
 
 		batch.setProjectionMatrix(camera.combined);
-		Bodies.ActualizarMundo();
+		MundoFisico.ActualizarMundo();
 
-		Bodies.Actualizarluces();
-		Bodies.pintarLuces();
+		MundoFisico.Actualizarluces();
+		MundoFisico.pintarLuces();
 
 		tablero.actualizar();
 		Bloque_Figura.Actualizar();
@@ -97,6 +93,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		Bodies.Dispose();
+		MundoFisico.Dispose();
 	}
 }

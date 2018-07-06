@@ -1,6 +1,9 @@
 package com.mygdx.game;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+
 import java.util.ArrayList;
 
 /**
@@ -9,13 +12,48 @@ import java.util.ArrayList;
 
 public class TableroRectangulo extends TableroGrafico {
 
-    public TableroRectangulo(TableroDisposicion disposicion){
-        super(disposicion);
-        setDispocicion(disposicion);
+
+    private int columnas;
+    private int filas;
+    private float x;
+    private float y;
+
+  /*  public TableroHorizontal(){
+        columnas=5;
+        filas=3;
+        x= (MyGdxGame.w/9)*2;
+        y= (MyGdxGame.h/15);
+    }*/
+
+
+    public TableroRectangulo(int columnas, int filas, float x, float y){
+        this.columnas=columnas;
+        this.filas=filas;
+        this.x=x;
+        this.y=y;
     }
     @Override
-    public void crear(){
-        getDispocicion().disponer(this);
+    public void crear(FactoryBloque factoryBloque){
+
+        RectanguloTablero rectangulo=null;
+
+        float X=x;
+        float Y=y;
+
+
+
+        for (int i = 0; i <filas ; i++) {
+            X=x;
+
+            for (int j = 0; j < columnas; j++) {
+
+                rectangulo= new RectanguloTablero(X,Y,MyGdxGame.w/9,MyGdxGame.w/9, Color.BLUE); //FiguraFactory.CrearRectanguloTablero(TipoFigura.RECTANGULO_TABLERO,X,Y);
+                //BloqueFactory.Crear(TipoBloque.BLOQUE_ACTIVO,rectangulo);
+                getBloquesTablero().add(factoryBloque.crearBloque(rectangulo));
+                X=rectangulo.getX()+rectangulo.getWidth()+ 2f/*(MyGdxGame.w/20)*/;
+            }
+            Y=rectangulo.getY()+rectangulo.getHeight()+ 2f/*(MyGdxGame.h/20)*/;
+        }
     }
 
     @Override
@@ -25,12 +63,10 @@ public class TableroRectangulo extends TableroGrafico {
         }
     }
 
-    @Override
-    public void establecerVecindad() {
-        getDispocicion().establecerVecindad(getBloquesTablero());
-    }
+  //  @Override
 
-    @Override
+
+  /*  @Override
     public void Rectangular(int columnas, int filas, float x, float y) {
 
 
@@ -48,22 +84,12 @@ public class TableroRectangulo extends TableroGrafico {
                 bloque=BloqueFactory.Crear(TipoBloque.BLOQUE_ACTIVO,rectangulo);
                 getBloquesTablero().add(bloque);
                 X=rectangulo.getX()+rectangulo.getWidth()+ 2f/*(MyGdxGame.w/20)*/;
-            }
+          /*  }
                 Y=rectangulo.getY()+rectangulo.getHeight()+ 2f/*(MyGdxGame.h/20)*/;
-        }
+      /*  }
 
-    }
-
-
-    @Override
-    public void Diagonal() {
-
-    }
+    }*/
 
 
 
-    @Override
-    public void validarBloques() {
-
-    }
 }

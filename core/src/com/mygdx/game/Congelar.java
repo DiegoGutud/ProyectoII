@@ -9,7 +9,7 @@ public class Congelar implements PowerUps {
 
     @Override
     public void activar(Figura figura) {
-        // TODO Auto-generated method stub
+
         figura.congelar();
     }
 

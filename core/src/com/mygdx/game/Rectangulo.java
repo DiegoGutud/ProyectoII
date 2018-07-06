@@ -27,54 +27,28 @@ public class Rectangulo extends Rectangle implements Figura {
 
 
     private Color color;
-    private ArrayList<Vector2> coordenadas;
+    private Coordenadas coordenadas;
     public ShapeRenderer shapeRenderer;
 
-    private Texture tex;
-    private PolygonSprite poly;
-    private PolygonSpriteBatch polybatch;
+
 
     public Rectangulo(float x, float y, float width, float height, Color color){
         super(x, y, width, height);
         this.color=color;
-        coordenadas=new ArrayList<Vector2>();
-        coordenadas.add(new Vector2 (x/100,y/100));
-        coordenadas.add(new Vector2(0,0));
+        coordenadas=new Coordenadas(x,y,0);
+        establecerCoordenadas();
 
         shapeRenderer= new ShapeRenderer();
-        tex=new Texture("Piso.jpg");
-
-        PolygonRegion reg= new PolygonRegion(new TextureRegion(tex),new float[]{0,0, getWidth(),0, getWidth(),getHeight(),0,getHeight()}, new short[]{0,1,2 ,0,2,3});
-        poly=new PolygonSprite(reg);
-        polybatch=new PolygonSpriteBatch();
 
 
     }
-    public Rectangulo(float x, float y, float width, float height, int color){
-        super(x, y, width, height);
-        this.color.set(color);
 
-        shapeRenderer= new ShapeRenderer();
-    }
-    public Rectangulo(float width, float height, int color){
-        this.height=height;
-        this.width=width;
-        this.color.set(color);
-        shapeRenderer= new ShapeRenderer();
-    }
-    public Rectangulo(float width, float height, Color color){
-        this.height=height;
-        this.width=width;
-        this.color.set(color);
-        shapeRenderer= new ShapeRenderer();
-    }
-    public Rectangulo(){}
+
 
 
     @Override
     public void moverse() {
-        y=y+0.1f;
-        //color=Color.GREEN;
+
     }
 
     @Override
@@ -95,38 +69,21 @@ public class Rectangulo extends Rectangle implements Figura {
     @Override
     public void pintar() {
 
-       /* polybatch.begin();
-        polybatch.disableBlending();
-        poly.setPosition(coordenadas.get(0).x*100,coordenadas.get(0).y*100);
-        poly.setRotation((float)(Math.toDegrees(coordenadas.get(1).x)));
-        poly.setOrigin(-x,-y);
-        poly.draw(polybatch);
-        polybatch.enableBlending();
-        polybatch.end();*/
-
-
-
         MyGdxGame.batch.begin();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(this.color);
-      //  shapeRenderer.rotate(0f,0f,1f,(coordenadas.get(1).x*180/(float)Math.PI));
-        //shapeRenderer.rect(coordenadas.get(0).x*100,coordenadas.get(0).y*100,getWidth(),getHeight());
-        shapeRenderer.rect(coordenadas.get(0).x*100,coordenadas.get(0).y*100,-x,-y,getWidth(),getHeight(),1f,1f,(float)(Math.toDegrees(coordenadas.get(1).x)));
-       // Gdx.app.log("pin1","Xpantalla:"+x+"Ypantalla:"+y);
+
+        coordenadas.metersToPixeles();
+        shapeRenderer.rect(coordenadas.getX(),coordenadas.getY(),-x,-y,getWidth(),getHeight(),1f,1f,coordenadas.getAngle());
+
         shapeRenderer.end();
         MyGdxGame.batch.end();
+        coordenadas.pixelesToMeters();
     }
 
     @Override
     public boolean seleccionado() {
-       // Gdx.app.log("TAAAAAAAAAAAAAAAAAAAAAAAAAG1111","Xpantalla:"+Gdx.input.getX()+"Ypantalla:"+Gdx.input.getY());
-       // Gdx.app.log("TAAAAAAAAAAAAAAAAAAAAAAAAAG2222","XVector:"+MyGdxGame.touchedPosition.x+"YVector:"+MyGdxGame.touchedPosition.y);
-        //Gdx.app.log("TAAAAAAAAAAAAAAAAAAAAAAAAAG3333","XRectangulo:"+this.x+"YRectangulo:"+this.y);
-
        if(contains(Gdx.input.getX(),Gdx.graphics.getHeight()-Gdx.input.getY())){
-
-       // if(contains(Gdx.input.getX(),Gdx.input.getY())){
-
             return true;
         }
         return false;
@@ -142,21 +99,22 @@ public class Rectangulo extends Rectangle implements Figura {
         setColor(Color.BLUE);
     }
 
-    public void setCoordenadas(ArrayList<Vector2> coordenadas) {
+    public void setCoordenadas(Coordenadas coordenadas) {
         this.coordenadas = coordenadas;
     }
 
-    public ArrayList<Vector2> getCoordenadas() {
+    public Coordenadas getCoordenadas() {
         return coordenadas;
     }
 
     public void establecerCoordenadas(){
 
 
-        coordenadas.add(new Vector2((-getWidth()/2)/100+x/100+(getWidth()/2)/100,(-getHeight()/2)/100+y/100+(getHeight()/2)/100));
-        coordenadas.add(new Vector2((getWidth()/2)/100+x/100+(getWidth()/2)/100,(-getHeight()/2)/100+y/100+(getHeight()/2)/100));
-        coordenadas.add(new Vector2((getWidth()/2)/100+x/100+(getWidth()/2)/100,(getHeight()/2)/100+y/100+(getHeight()/2)/100));
-        coordenadas.add(new Vector2((-getWidth()/2)/100+x/100+(getWidth()/2)/100,(getHeight()/2)/100+y/100+(getHeight()/2)/100));
+        coordenadas.addVertice(new Vector2((-getWidth()/2)+x+(getWidth()/2),(-getHeight()/2)+y+(getHeight()/2)));
+        coordenadas.addVertice(new Vector2((getWidth()/2)+x+(getWidth()/2),(-getHeight()/2)+y+(getHeight()/2)));
+        coordenadas.addVertice(new Vector2((getWidth()/2)+x+(getWidth()/2),(getHeight()/2)+y+(getHeight()/2)));
+        coordenadas.addVertice(new Vector2((-getWidth()/2)+x+(getWidth()/2),(getHeight()/2)+y+(getHeight()/2)));
+        coordenadas.pixelesToMeters();
     }
 
     public void enviarCoordenadas(){
@@ -167,16 +125,16 @@ public class Rectangulo extends Rectangle implements Figura {
     @Override
     public Figura copiar() {
 
-        establecerCoordenadas();
         Rectangulo rectangulo=new Rectangulo(this.x,this.y,this.width,this.height,Color.WHITE);
-        rectangulo.establecerCoordenadas();
         rectangulo.enviarCoordenadas();
         return rectangulo;
     }
 
 
 
-
+    public Color getColor(){
+        return this.color;
+    }
     public void setColor(Color color){
         this.color=color;
     }

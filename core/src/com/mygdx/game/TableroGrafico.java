@@ -12,37 +12,38 @@ import java.util.ArrayList;
  */
 
 public abstract class TableroGrafico extends Tablero {
-    private TableroDisposicion dispocicion;
 
-    public TableroGrafico( TableroDisposicion disposicion){
 
-        super();
-        this.dispocicion = dispocicion;
+    public TableroGrafico( ){
 
     }
 
-    public abstract void Rectangular(int columnas, int filas,float x, float y);
-    public abstract void Diagonal();
 
-    public TableroDisposicion getDispocicion() {
-        return dispocicion;
-    }
+
+
 
     @Override
     public void actualizar(){
-        Bloque bloque;
+
         if(Gdx.input.isTouched()){
-            Gdx.app.log("TAAAAAAAAAAAAAAAAAAAAAAAAAG","I:"+1);
+
             for (Bloque a: getBloquesTablero()) {
+
                 //Comprueba que se haya seleccionado el bloque
-                if(a.GetFigura().seleccionado()){
-                    if( validarCreacionBloque(a)) {
-                        a.GetFigura().seleccionar();
-                        getBloquesACrear().add(a);
+                if(a.GetFigura().seleccionado()){  //Ley de Demeter
+
+                    getBloquesACrear().add(a);
+                    if( (getBloquesACrear().isEmpty()) || (validarRestricciones())) {
+
+                        a.GetFigura().seleccionar();//Ley de Demeter
 
                     }
+                    else{
+                        Gdx.app.log("Cicloooooooooooooooooooooooooooooooooo","REMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOVEEED");
+                        getBloquesACrear().remove(getBloquesACrear().size()-1);
+                    }
                     break;
-               }
+                }
 
             }
 
@@ -58,7 +59,7 @@ public abstract class TableroGrafico extends Tablero {
         }
     }
 
-    @Override
+  /*  @Override
     public boolean validarCreacionBloque(Bloque bloque){
             Bloque b;
             //comprueba que la lista de bloques creados no este vacia
@@ -87,7 +88,7 @@ public abstract class TableroGrafico extends Tablero {
             return true;
 
 
-    }
+    }*/
     @Override
     public void crearFigura(ArrayList<Bloque> bloque){
 
@@ -97,8 +98,9 @@ public abstract class TableroGrafico extends Tablero {
 
         ArrayList<Bloque> BloquesNuevos = new ArrayList<Bloque>();
 //AÑADIR VECINOS DE CADA UNO POR AQUI SI ES QUE YA NO ESTAN AÑADIDOS
+        FactoryBloque factoryBloque= new FactoryBloquesActivos();
         for (Bloque a: bloque) {
-            BloquesNuevos.add(a.copiar());
+            BloquesNuevos.add(a.copiar(factoryBloque));
         }
 
         bloqueFigura.setBloqueFigura(BloquesNuevos);
@@ -112,9 +114,6 @@ public abstract class TableroGrafico extends Tablero {
     }
 
 
-    public void setDispocicion(TableroDisposicion dispocicion) {
-        this.dispocicion = dispocicion;
-    }
 
 
 }

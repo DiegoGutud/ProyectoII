@@ -15,7 +15,7 @@ public abstract class Bloque {
 
     public Bloque(Figura figura) {
         this.figura=figura;
-        estado = EstadoFactory.Crear(TipoEstado.DETENERSE);
+        estado = null;
         Vecinos= new ArrayList<Bloque>();
     }
 
@@ -34,8 +34,9 @@ public abstract class Bloque {
     public boolean comprobarVecindad(Bloque bloque){
         return (this.Vecinos.contains(bloque));
     }
-    public Bloque copiar(){
-        Bloque bloque=BloqueFactory.Crear(TipoBloque.BLOQUE_ACTIVO,this.figura.copiar());
+    public Bloque copiar(FactoryBloque factoryBloque){
+        Bloque bloque=factoryBloque.crearBloque(this.figura.copiar());
+                //BloqueFactory.Crear(TipoBloque.BLOQUE_ACTIVO,this.figura.copiar());
         return bloque;
     }
 
